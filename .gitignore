@@ -1,0 +1,43 @@
+# --- Laravel / PHP ---
+backend/vendor/
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/storage/*.key
+backend/storage/app/*
+!backend/storage/app/.gitkeep
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/logs/*
+!backend/storage/logs/.gitkeep
+backend/bootstrap/cache/*
+!backend/bootstrap/cache/.gitkeep
+backend/public/hot
+backend/public/storage
+backend/.phpunit.result.cache
+
+# --- Flutter / Dart ---
+frontend/.dart_tool/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.packages
+frontend/build/
+frontend/android/.gradle/
+frontend/android/local.properties
+frontend/ios/Pods/
+frontend/ios/.symlinks/
+frontend/web/main.dart.js
+frontend/*.iml
+
+# --- Node (tooling) ---
+node_modules/
+npm-debug.log*
+
+# --- General ---
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.swp
