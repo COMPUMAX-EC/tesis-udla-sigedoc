@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-# Aprovisionamiento inicial de la VM de desarrollo (Ubuntu 24.04).
-# Ejecutar UNA vez, interactivamente (pide password de sudo):
+# Parte del aprovisionamiento que REQUIERE sudo (contraseña interactiva).
+# Ejecutar UNA vez en la VM:
 #
-#   bash infra/provision-vm.sh
+#   cd ~/tesis-udla-sigedoc && bash infra/provision-vm-sudo.sh
 #
+# Todo lo que NO requiere sudo (Flutter SDK, Composer, git clone) se hace
+# aparte, sin intervención manual.
 set -euo pipefail
 
 echo "==> Actualizando índices de paquetes"
@@ -17,14 +19,7 @@ sudo apt-get install -y \
   php8.3 php8.3-cli php8.3-fpm php8.3-common \
   php8.3-pgsql php8.3-mbstring php8.3-xml php8.3-curl \
   php8.3-zip php8.3-bcmath php8.3-gd php8.3-intl \
-  unzip curl git
-
-echo "==> Instalando Composer"
-if ! command -v composer >/dev/null 2>&1; then
-  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-  rm -f composer-setup.php
-fi
+  unzip curl
 
 echo "==> Dejando activo solo el clúster PostgreSQL 17 (libera RAM: la VM tiene 3.9GB)"
 sudo pg_ctlcluster 14 main stop || true
@@ -51,35 +46,21 @@ SELECT 'CREATE DATABASE ${DB_NAME} OWNER ${DB_USER}'
 WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '${DB_NAME}')\gexec
 SQL
 
-echo "==> Instalando Flutter SDK (canal stable) en \$HOME/flutter"
-if [ ! -d "$HOME/flutter" ]; then
-  git clone https://github.com/flutter/flutter.git -b stable "$HOME/flutter"
-fi
-if ! grep -q 'flutter/bin' "$HOME/.bashrc"; then
-  echo 'export PATH="$HOME/flutter/bin:$PATH"' >> "$HOME/.bashrc"
-fi
-export PATH="$HOME/flutter/bin:$PATH"
-flutter precache --web
-flutter config --enable-web
-flutter doctor || true
-
-echo "==> Instalando Nginx (ya presente, se configura al desplegar)"
+echo "==> Nginx (reverse proxy para el despliegue)"
 sudo apt-get install -y nginx
 
 cat <<EOF
 
 ============================================================
-Aprovisionamiento completo.
+Listo. Guarda estas credenciales (no se vuelven a mostrar):
 
-Credenciales de base de datos (guárdalas, no se repiten):
   DB_DATABASE=${DB_NAME}
   DB_USERNAME=${DB_USER}
   DB_PASSWORD=${DB_PASS}
   DB_HOST=127.0.0.1
-  DB_PORT=5434   # puerto del clúster 17, confirmar con: pg_lsclusters
+  DB_PORT=5434   # confirmar con: pg_lsclusters
 
-Siguiente paso: cierra sesión y vuelve a entrar (o \`source ~/.bashrc\`)
-para que \`flutter\` quede en el PATH, luego clona el repo:
-  git clone https://github.com/COMPUMAX-EC/tesis-udla-sigedoc.git
+Pégalas en el chat (o pega el .env que te genere) y yo continúo
+por SSH con Composer, migraciones y el scaffold de Laravel/Flutter.
 ============================================================
 EOF
