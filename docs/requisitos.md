@@ -20,7 +20,11 @@ Resumen: RF 0/26 · RNF 0/7 · RN 0/6.
 - ✅ Flutter 3.47.2 instalado en la VM, web habilitado
 - ✅ PHP 8.3 instalado en la VM
 - ✅ PostgreSQL 17 activo en la VM (puerto 5434)
-- ⬜ Composer, proyecto Laravel, proyecto Flutter, migraciones
+- ✅ Composer instalado; proyecto Laravel 13 + Sanctum creado en `backend/`
+- ✅ Proyecto Flutter (web + Android) creado en `frontend/`
+- 🟡 Migración de las 12 tablas y seeders escritos; falta ejecutarlos contra la base `sigedoc`
+- 🟡 M01 (login, usuarios, roles, departamentos, tipos documentales) programado en API y
+  Flutter; se marcará cumplido al verificarlo contra la base de datos
 
 ## Requisitos funcionales
 

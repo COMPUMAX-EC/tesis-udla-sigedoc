@@ -8,7 +8,7 @@ Trabajo de Integración Curricular (Tesis UDLA).
 
 | Capa | Tecnología |
 |---|---|
-| Backend / API REST | Laravel 11 (PHP 8.3), patrón MVC |
+| Backend / API REST | Laravel 13 (PHP 8.3), patrón MVC — la tesis indica Laravel 11, pero esa versión ya no recibe parches de seguridad y Composer la bloquea |
 | Frontend web + móvil | Flutter (codebase único) |
 | Base de datos | PostgreSQL 17 |
 | Autenticación | Laravel Sanctum, roles: Administrador / Responsable del archivo / Funcionario departamental |
@@ -67,6 +67,16 @@ cd frontend
 flutter pub get
 flutter run -d web-server --web-hostname=0.0.0.0 --web-port=5000
 ```
+
+Demo en un solo puerto (Flutter web + `/api` de Laravel, equivalente al Nginx de
+producción) — ver [`infra/serve-app.sh`](infra/serve-app.sh):
+```bash
+infra/serve-app.sh          # compila Flutter web y sirve en 127.0.0.1:8091
+ngrok http 8091             # link público para revisiones
+```
+
+Los requisitos también están en Word: [`docs/requisitos.docx`](docs/requisitos.docx)
+(generado desde `docs/requisitos.md`).
 
 ## Licencia
 
