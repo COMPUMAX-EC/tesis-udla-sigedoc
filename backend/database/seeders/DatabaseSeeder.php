@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Usuarios iniciales (uno por rol). Clave desde SIGEDOC_DEMO_CLAVE o aleatoria.
-        $clave = env('SIGEDOC_DEMO_CLAVE') ?: Str::password(12, symbols: false);
+        $clave = config('app.demo_clave') ?: Str::password(12, symbols: false);
         $creados = [];
         foreach ([
             ['admin', 'Administrador', 'del Sistema', Usuario::ROL_ADMINISTRADOR, null],

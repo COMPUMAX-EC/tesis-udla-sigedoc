@@ -15,6 +15,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    // Clave inicial de los usuarios creados por el seeder (vacía = aleatoria).
+    'demo_clave' => env('SIGEDOC_DEMO_CLAVE'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
