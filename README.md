@@ -8,7 +8,7 @@ Trabajo de Integración Curricular (Tesis UDLA).
 
 | Capa | Tecnología |
 |---|---|
-| Backend / API REST | Laravel 13 (PHP 8.3), patrón MVC — la tesis indica Laravel 11, pero esa versión ya no recibe parches de seguridad y Composer la bloquea |
+| Backend / API REST | Laravel 13 (PHP 8.3), patrón MVC |
 | Frontend web + móvil | Flutter (codebase único) |
 | Base de datos | PostgreSQL 17 |
 | Autenticación | Laravel Sanctum, roles: Administrador / Responsable del archivo / Funcionario departamental |

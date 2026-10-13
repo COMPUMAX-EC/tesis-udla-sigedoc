@@ -2,13 +2,6 @@
 
 Fuente: Tesis VHQP V1.8, Tablas 33–46. Motor: PostgreSQL 17.
 
-> **Nota de implementación:** en la tesis, la Tabla 41 ("Archivo_digital") repite casi
-> literalmente los campos de la tabla `documento` (incluyendo `id_categoria` renombrado
-> a `id_tipo_documental`), lo cual es inconsistente con su propósito declarado
-> (archivo digital adjunto a un documento). Se interpreta aquí como el adjunto/escaneo
-> digital de un `documento` — ver sección al final. Ajustar si el director de tesis
-> aclara lo contrario.
-
 ## rol
 | Campo | Tipo | Restricción |
 |---|---|---|

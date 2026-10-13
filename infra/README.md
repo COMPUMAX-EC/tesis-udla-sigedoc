@@ -1,25 +1,19 @@
-# Aprovisionamiento de la VM
+# Infraestructura
 
-El aprovisionamiento se divide en dos partes porque el asistente no puede escribir
-contraseñas de `sudo` en ninguna terminal, ni siquiera si el usuario la proporciona:
+Servidor: Ubuntu 24.04 con PHP 8.3, Composer, PostgreSQL 17, Flutter y Nginx.
 
-1. **`provision-vm-sudo.sh`** — la única parte que requiere `sudo` (instala PHP 8.3,
-   deja activo solo el clúster PostgreSQL 17, crea la base `sigedoc`, instala Nginx).
-   **Debe ejecutarla el usuario, interactivamente:**
-   ```bash
-   cd ~/tesis-udla-sigedoc
-   bash infra/provision-vm-sudo.sh
-   ```
-   Al final imprime las credenciales de la base de datos — pégalas en el chat (o el
-   `.env` resultante) para continuar.
+| Script | Uso |
+|---|---|
+| `provision-vm-sudo.sh` | Instala PHP 8.3 y Nginx, activa PostgreSQL 17 y crea la base `sigedoc` con su usuario. Requiere `sudo`; imprime las credenciales para el `.env` del backend. |
+| `serve-app.sh` | Compila Flutter web y sirve la aplicación completa (interfaz + `/api`) en `127.0.0.1:8091`. |
+| `dev-router.php` | Enrutador usado por `serve-app.sh`: `/api/*` → Laravel, resto → build de Flutter. |
+| `serve-docs.sh` | Publica la documentación de `docs/` en la red privada (Tailscale). |
 
-2. Todo lo demás (Flutter SDK en `~/flutter`, Composer, `git clone`, scaffolding de
-   Laravel/Flutter, migraciones) no requiere `sudo` y se ejecuta directamente por SSH.
+Despliegue de la aplicación:
 
-Estado en la VM de desarrollo (`ciit@100.64.139.1`, Ubuntu 24.04, acceso vía
-Tailscale):
-- [x] Flutter 3.47.2 (stable) instalado en `~/flutter`, `enable-web` activado.
-- [ ] PHP 8.3 + extensiones (pendiente — requiere `provision-vm-sudo.sh`).
-- [ ] PostgreSQL 17 activo + base `sigedoc` (pendiente — requiere `provision-vm-sudo.sh`).
-- [ ] Composer.
-- [ ] Nginx configurado como reverse proxy (se hace en el sprint de despliegue).
+```bash
+bash infra/provision-vm-sudo.sh          # una vez, con sudo
+cd backend && composer install && cp .env.example .env && php artisan key:generate
+php artisan migrate --seed
+cd .. && infra/serve-app.sh
+```

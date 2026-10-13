@@ -15,7 +15,7 @@ class Seccion {
   final Widget Function() construir;
 }
 
-/// Las secciones se agregan aquí a medida que cada módulo se implementa.
+/// Secciones de navegación y roles que pueden verlas.
 final secciones = <Seccion>[
   Seccion('Inicio', Icons.dashboard_outlined, const [], () => const PanelScreen()),
   Seccion('Usuarios', Icons.people_outline, const ['Administrador'], () => const UsuariosScreen()),

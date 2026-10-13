@@ -16,8 +16,8 @@ integraciones externas contempladas en el alcance actual.
 - **API REST (Laravel)** — lógica de negocio, autenticación (Sanctum), orquesta acceso
   a datos y archivos. Único punto de acceso a la base de datos.
 - **PostgreSQL** — almacenamiento relacional.
-- **Repositorio de archivos** — almacenamiento de adjuntos digitales (filesystem local
-  en la VM inicialmente; `Storage` de Laravel permite migrar a S3-compatible después).
+- **Repositorio de archivos** — almacenamiento de adjuntos digitales (filesystem del
+  servidor mediante `Storage` de Laravel, compatible con almacenamiento S3).
 
 Regla de diseño: los clientes (web/móvil) **nunca** acceden directamente a PostgreSQL
 ni al filesystem — todo pasa por la API REST sobre HTTPS.
@@ -35,12 +35,12 @@ ni al filesystem — todo pasa por la API REST sobre HTTPS.
 | Acceso a datos | Eloquent ORM sobre PostgreSQL | — |
 | Gestión de archivos | Adjuntos digitales vía `Storage` | — |
 
-Mapeo sugerido a Laravel: cada componente ≈ un `Controller` + `Service` + conjunto de
+Implementación en Laravel: cada componente ≈ un `Controller` + `Service` + conjunto de
 `Model`s Eloquent bajo `app/Domain/<Componente>` o `app/Http/Controllers/Api/`.
 
 ## Infraestructura de despliegue
 
-Cliente-servidor sobre una única VM inicialmente:
+Cliente-servidor sobre un servidor Ubuntu:
 
 ```
 [Flutter web (build estático)] ─┐
