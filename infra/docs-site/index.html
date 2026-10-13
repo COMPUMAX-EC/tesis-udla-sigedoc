@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIGEDOC · Documentación</title>
+<style>
+  :root { --bg:#fff; --fg:#1f2328; --muted:#59636e; --line:#d1d9e0; --side:#f6f8fa; --accent:#0969da; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#3d444d; --side:#151b23; --accent:#4493f8; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.6 system-ui, sans-serif; display:flex; min-height:100vh; }
+  nav { width:240px; flex-shrink:0; background:var(--side); border-right:1px solid var(--line); padding:20px 16px; }
+  nav h1 { font-size:16px; margin:0 0 4px; }
+  nav p { font-size:12px; color:var(--muted); margin:0 0 16px; }
+  nav a { display:block; padding:6px 10px; border-radius:6px; color:var(--fg); text-decoration:none; }
+  nav a.active, nav a:hover { background:var(--line); }
+  main { flex:1; min-width:0; padding:24px 32px; max-width:1100px; }
+  table { border-collapse:collapse; display:block; overflow-x:auto; margin:12px 0; }
+  th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; }
+  th { background:var(--side); }
+  pre { background:var(--side); padding:12px; border-radius:6px; overflow-x:auto; }
+  code { font-family: ui-monospace, monospace; font-size:13px; }
+  a { color:var(--accent); }
+  h1, h2 { border-bottom:1px solid var(--line); padding-bottom:4px; }
+  @media (max-width: 720px) {
+    body { flex-direction:column; }
+    nav { width:auto; border-right:0; border-bottom:1px solid var(--line); }
+    main { padding:16px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <h1>SIGEDOC</h1>
+  <p>Tesis UDLA · VIALZACHIN E.P.</p>
+  <div id="menu"></div>
+</nav>
+<main id="content">Cargando…</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+  // Los .md se sirven en vivo desde docs/ del repo (montado en /docs por tailscale serve).
+  const DOCS = [
+    ["requisitos.md", "Requisitos (cumplimiento)"],
+    ["product-backlog.md", "Product backlog"],
+    ["arquitectura.md", "Arquitectura"],
+    ["diccionario-datos.md", "Diccionario de datos"],
+    ["tipos-documentales.md", "Tipos documentales"],
+  ];
+  const menu = document.getElementById("menu");
+  const content = document.getElementById("content");
+  menu.innerHTML = DOCS.map(([f, t]) => `<a href="#${f}">${t}</a>`).join("");
+
+  async function show() {
+    const file = location.hash.slice(1) || DOCS[0][0];
+    menu.querySelectorAll("a").forEach(a => a.classList.toggle("active", a.hash === "#" + file));
+    try {
+      const res = await fetch("docs/" + encodeURIComponent(file), { cache: "no-store" });
+      if (!res.ok) throw new Error(res.status);
+      content.innerHTML = marked.parse(await res.text());
+      // Enlaces entre documentos (p. ej. "requisitos.md") navegan dentro del visor.
+      content.querySelectorAll("a[href$='.md']").forEach(a => {
+        a.href = "#" + a.getAttribute("href").split("/").pop();
+      });
+    } catch (e) {
+      content.textContent = "No se pudo cargar " + file + " (" + e.message + ")";
+    }
+  }
+  addEventListener("hashchange", show);
+  show();
+</script>
+</body>
+</html>
