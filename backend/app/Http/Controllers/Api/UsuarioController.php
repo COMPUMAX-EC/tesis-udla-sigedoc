@@ -26,6 +26,20 @@ class UsuarioController extends Controller
         return response()->json($q->get());
     }
 
+    /** Directorio de usuarios activos para elegir al receptor de un préstamo (Responsable del archivo). */
+    public function directorio(Request $request): JsonResponse
+    {
+        $q = Usuario::with('departamento:id_departamento,nombre')
+            ->where('estado', true)
+            ->whereHas('rol', fn ($r) => $r->where('nombre', '!=', Usuario::ROL_ADMINISTRADOR))
+            ->orderBy('apellidos')->orderBy('nombres');
+        if ($buscar = $request->query('buscar')) {
+            $q->whereRaw("(nombres || ' ' || apellidos) ILIKE ?", ["%$buscar%"]);
+        }
+
+        return response()->json($q->get(['id_usuario', 'nombres', 'apellidos', 'id_departamento']));
+    }
+
     public function show(Usuario $usuario): JsonResponse
     {
         return response()->json($usuario->load('rol', 'departamento'));

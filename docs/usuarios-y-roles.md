@@ -27,7 +27,7 @@ correo; un usuario o rol desactivado no puede entrar.
 | Registrar, clasificar, ubicar y actualizar documentos | — | ✔ | — |
 | Consultar documentos | — | ✔ | ✔ |
 | Generar e imprimir etiquetas QR | — | ✔ | — |
-| Escanear código QR | — | — | ✔ |
+| Escanear código QR | — | ✔ | ✔ |
 | Solicitar préstamo | — | — | ✔ |
 | Autorizar o rechazar préstamo, registrar entrega y devolución | — | ✔ | — |
 | Consultar historial y ubicación actual | — | ✔ | ✔ (solo ubicación) |

@@ -13,6 +13,7 @@ class Catalogo {
 
   static const roles = Catalogo('roles', 'rol', 'id_rol'); // RF-01.3
   static const departamentos = Catalogo('departamentos', 'departamento', 'id_departamento'); // RF-01.4
+  static const categorias = Catalogo('categorias', 'categoría', 'id_categoria'); // RF-02.2
   static const tiposDocumentales =
       Catalogo('tipos-documentales', 'tipo documental', 'id_tipo_documental', conDepartamento: true); // RF-01.5
 }
