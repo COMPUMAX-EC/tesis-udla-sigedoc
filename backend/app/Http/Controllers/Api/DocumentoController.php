@@ -128,7 +128,7 @@ class DocumentoController extends Controller
             if (array_key_exists('id_ubicacion', $d) && (int) $d['id_ubicacion'] !== (int) $ubicacionAnterior) {
                 $antes = $ubicacionAnterior ? Ubicacion::find($ubicacionAnterior)?->etiqueta : 'sin ubicación';
                 $ahora = $d['id_ubicacion'] ? Ubicacion::find($d['id_ubicacion'])?->etiqueta : 'sin ubicación';
-                Trazabilidad::registrar($documento, $request->user(), Trazabilidad::CAMBIO_UBICACION, "De «$antes» a «$ahora»");
+                Trazabilidad::registrar($documento, $request->user(), Trazabilidad::CAMBIO_UBICACION, "De «{$antes}» a «{$ahora}»");
             } else {
                 Trazabilidad::registrar($documento, $request->user(), Trazabilidad::ACTUALIZACION, 'Datos del documento actualizados');
             }
