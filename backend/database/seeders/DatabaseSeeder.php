@@ -66,6 +66,11 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        if (config('app.demo')) {
+            config(['app.demo_clave' => $clave]); // misma clave para los usuarios base y los de demostración
+            $this->call(DemoSeeder::class);
+        }
+
         if ($creados) {
             $this->command?->info('Usuarios creados: '.implode(', ', $creados)." · clave: $clave");
         }

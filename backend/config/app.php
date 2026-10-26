@@ -18,6 +18,9 @@ return [
     // Clave inicial de los usuarios creados por el seeder (vacía = aleatoria).
     'demo_clave' => env('SIGEDOC_DEMO_CLAVE'),
 
+    // Entorno de demostración: carga datos sintéticos (DemoSeeder) y muestra un aviso en la interfaz.
+    'demo' => (bool) env('SIGEDOC_DEMO', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

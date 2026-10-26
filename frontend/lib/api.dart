@@ -21,6 +21,19 @@ class Api {
 
   String get rol => usuario?['rol']?['nombre'] ?? '';
   bool get esAdmin => rol == 'Administrador';
+  bool get esResponsable => rol == 'Responsable del archivo';
+  bool get esFuncionario => rol == 'Funcionario departamental';
+  int get idUsuario => usuario?['id_usuario'] ?? 0;
+
+  /// Información pública del entorno (indica si los datos son de demostración).
+  static Future<bool> esDemo() async {
+    try {
+      final r = await http.get(Uri.parse('$base/entorno'), headers: {'Accept': 'application/json'});
+      return (jsonDecode(r.body) as Map)['demo'] == true;
+    } catch (_) {
+      return false;
+    }
+  }
 
   Future<bool> restaurarSesion() async {
     final prefs = await SharedPreferences.getInstance();
@@ -61,6 +74,14 @@ class Api {
       _enviar(http.post(Uri.parse('$base/$ruta'), headers: _headers, body: jsonEncode(body)));
   Future<dynamic> put(String ruta, Map<String, dynamic> body) =>
       _enviar(http.put(Uri.parse('$base/$ruta'), headers: _headers, body: jsonEncode(body)));
+  /// Sube un archivo (multipart) a la API, p. ej. la copia digital de un documento.
+  Future<dynamic> subir(String ruta, String campo, List<int> bytes, String nombre) async {
+    final peticion = http.MultipartRequest('POST', Uri.parse('$base/$ruta'))
+      ..headers.addAll({'Accept': 'application/json', if (_token != null) 'Authorization': 'Bearer $_token'})
+      ..files.add(http.MultipartFile.fromBytes(campo, bytes, filename: nombre));
+    return _enviar(peticion.send().then(http.Response.fromStream));
+  }
+
   Future<dynamic> delete(String ruta) => _enviar(http.delete(Uri.parse('$base/$ruta'), headers: _headers));
 
   Map<String, String> get _headers => {

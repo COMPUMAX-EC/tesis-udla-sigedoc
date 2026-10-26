@@ -41,6 +41,11 @@ Especificación completa de requisitos funcionales/no funcionales:
 [`docs/requisitos.md`](docs/requisitos.md). Backlog priorizado por sprint:
 [`docs/product-backlog.md`](docs/product-backlog.md).
 
+## Para el equipo de estudiantes
+
+Instalar Antigravity, clonar el repositorio y subir cambios con tu propia cuenta de GitHub:
+[`docs/guia-estudiantes.md`](docs/guia-estudiantes.md).
+
 ## Entorno de desarrollo (VM vía SSH)
 
 El desarrollo se realiza sobre una VM Ubuntu accesible por Tailscale/SSH.

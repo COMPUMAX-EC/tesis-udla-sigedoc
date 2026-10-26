@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*'); // detrás de ngrok/Nginx: las URLs firmadas usan https
         $middleware->alias(['rol' => \App\Http\Middleware\EnsureRol::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

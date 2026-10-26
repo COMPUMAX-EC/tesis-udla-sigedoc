@@ -3,21 +3,19 @@ import 'package:flutter/material.dart';
 import 'api.dart';
 import 'screens/login.dart';
 import 'screens/shell.dart';
+import 'theme.dart';
 
 void main() => runApp(const SigedocApp());
 
 class SigedocApp extends StatelessWidget {
   const SigedocApp({super.key});
 
-  static const verde = Color(0xFF1B5E3A);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SIGEDOC · VIALZACHIN E.P.',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: verde, useMaterial3: true),
-      darkTheme: ThemeData(colorSchemeSeed: verde, brightness: Brightness.dark, useMaterial3: true),
+      theme: temaSigedoc(),
       home: const Inicio(),
     );
   }
@@ -33,10 +31,12 @@ class Inicio extends StatefulWidget {
 
 class _InicioState extends State<Inicio> {
   bool? _autenticado;
+  bool _demo = false;
 
   @override
   void initState() {
     super.initState();
+    Api.esDemo().then((d) => mounted ? setState(() => _demo = d) : null);
     Api.instance.restaurarSesion().then((ok) => setState(() => _autenticado = ok));
   }
 
@@ -44,8 +44,8 @@ class _InicioState extends State<Inicio> {
   Widget build(BuildContext context) {
     return switch (_autenticado) {
       null => const Scaffold(body: Center(child: CircularProgressIndicator())),
-      true => Shell(alSalir: () => setState(() => _autenticado = false)),
-      false => LoginScreen(alEntrar: () => setState(() => _autenticado = true)),
+      true => Shell(demo: _demo, alSalir: () => setState(() => _autenticado = false)),
+      false => LoginScreen(demo: _demo, alEntrar: () => setState(() => _autenticado = true)),
     };
   }
 }
